@@ -1,12 +1,12 @@
 #!/bin/bash
 
-# Trip Planner Startup Script
+# Recipe Creator Startup Script
 
-echo "🚀 Starting AI Trip Planner..."
+echo "🍳 Starting AI Recipe Creator..."
 
 # Check if we're in the right directory
 if [ ! -d "backend" ] || [ ! -d "frontend" ]; then
-    echo "❌ Error: Please run this script from the trip_planner directory"
+    echo "❌ Error: Please run this script from the ai-recipe-creator directory"
     exit 1
 fi
 
@@ -31,7 +31,7 @@ echo ""
 echo "✅ Services started successfully!"
 echo "📡 Backend API: http://localhost:8000"
 echo "🎨 Frontend: http://localhost:3000"
-echo "📊 Phoenix Tracing: https://app.phoenix.arize.com/"
+echo "📊 Arize Tracing: https://app.arize.com/"
 echo ""
 echo "Press Ctrl+C to stop all services"
 

@@ -1,28 +1,31 @@
-# AI Trip Planner
+# AI Recipe Creator
 
-A fast, intelligent trip planning application powered by LangGraph, Groq, and Arize observability.
+A personalized recipe creation application that generates custom recipes based on available ingredients, user preferences, and dietary requirements. Powered by LangGraph, OpenAI, and Arize observability.
 
-## 🚀 Performance Features
+## 🍳 Core Features
 
-- **Groq Integration**: Uses Groq's lightning-fast inference for 10x faster responses
-- **Parallel Processing**: Research, budget analysis, and local experiences run simultaneously
-- **Optimized Graph**: Streamlined workflow eliminates unnecessary supervisor overhead
-- **LiteLLM Instrumentation**: Comprehensive observability and prompt template tracking
+- **Ingredient-Based Recipe Generation**: Create recipes from available ingredients with smart substitutions
+- **Persistent Seasoning Profiles**: Save and reuse your favorite seasoning combinations
+- **Calorie-Aware Options**: Get recipes with detailed nutritional information
+- **Global Cuisine Navigation**: Explore 20+ world cuisines with cultural context
+- **Dietary Restrictions Support**: Keto, vegetarian, vegan, gluten-free, and more
 
 ## Architecture
 
 ### Frontend (React + TypeScript)
-- Modern Material-UI interface
-- Real-time trip planning requests
-- Error handling and loading states
+- Modern Apple-inspired Material-UI interface
+- Dynamic ingredient input with add/remove functionality
+- Comprehensive recipe display with nutrition info
+- Seasoning profile management
+- Shopping list generation
 
 ### Backend (FastAPI + LangGraph)
-- **Parallel LangGraph Workflow**: 
-  - Research Node: Destination analysis
-  - Budget Node: Cost breakdown and recommendations  
-  - Local Experiences Node: Authentic recommendations
-  - Itinerary Node: Combines all data into day-by-day plan
-- **Groq LLM**: Fast inference with `llama-3.1-70b-versatile`
+- **Sequential LangGraph Workflow**: 
+  - Ingredient Analysis Node: Recipe possibilities and substitutions
+  - Cuisine Research Node: Cooking techniques and flavor profiles
+  - Nutrition Calculation Node: Calorie and macro breakdown
+  - Recipe Generation Node: Complete recipe with instructions
+- **OpenAI GPT-4o-mini**: Creative recipe generation with 0.7 temperature
 - **Comprehensive Tracing**: LangChain + LiteLLM instrumentation
 
 ## Quick Start
@@ -32,8 +35,8 @@ A fast, intelligent trip planning application powered by LangGraph, Groq, and Ar
 Create a `.env` file in the `backend/` directory:
 
 ```bash
-# Required: Groq API Key (get from https://console.groq.com)
-GROQ_API_KEY=your_groq_api_key_here
+# Required: OpenAI API Key (get from https://platform.openai.com)
+OPENAI_API_KEY=your_openai_api_key_here
 
 # Required: Arize observability (get from https://app.arize.com)
 ARIZE_SPACE_ID=your_arize_space_id
@@ -41,9 +44,6 @@ ARIZE_API_KEY=your_arize_api_key
 
 # Optional: For web search capabilities
 TAVILY_API_KEY=your_tavily_api_key
-
-# Optional: Fallback to OpenAI if Groq unavailable
-OPENAI_API_KEY=your_openai_api_key
 
 # LiteLLM Configuration
 LITELLM_LOG=DEBUG
@@ -77,43 +77,82 @@ The application will be available at:
 - Backend API: http://localhost:8000
 - API Docs: http://localhost:8000/docs
 
-## Performance Optimizations
+## Recipe Creation Workflow
 
-### ⚡ Groq Integration
-- **10x faster inference** compared to OpenAI
-- Uses `llama-3.1-70b-versatile` model for optimal speed/quality balance
-- 30-second timeout with 2000 max tokens
+### 🔄 Sequential Graph Execution
+1. **Ingredient Analysis**: Analyzes available ingredients and suggests recipe possibilities
+2. **Cuisine Research**: Researches cooking techniques and flavor profiles for the selected cuisine
+3. **Nutrition Calculation**: Calculates approximate nutritional information per serving
+4. **Recipe Generation**: Creates complete recipe with instructions, tips, and substitutions
 
-### 🔄 Parallel Graph Execution
-- Research, budget, and local experience analysis run **simultaneously**
-- Reduces total execution time from ~30-60 seconds to ~10-15 seconds
-- Final itinerary creation waits for all parallel tasks to complete
-
-### 📊 Observability
-- **LangChain + LiteLLM instrumentation** for comprehensive tracing
-- Prompt template tracking with proper variable separation
-- Real-time performance monitoring via Arize platform
+### 📊 Recipe Features
+- **Smart Substitutions**: Suggests alternatives for missing ingredients
+- **Nutritional Breakdown**: Calories, protein, carbs, fat, and fiber per serving
+- **Cooking Tips**: Step-by-step instructions with timing and helpful tips
+- **Cultural Context**: Information about cooking techniques and traditional methods
 
 ## API Endpoints
 
-### POST `/plan-trip`
-Creates a comprehensive trip plan.
+### POST `/create-recipe`
+Creates a personalized recipe based on available ingredients and preferences.
 
 **Request:**
 ```json
 {
-  "destination": "Tokyo, Japan",
-  "duration": "7 days", 
-  "budget": "$2000",
-  "interests": "food, culture, temples",
-  "travel_style": "cultural"
+  "ingredients": [
+    {
+      "name": "chicken breast",
+      "quantity": "2",
+      "unit": "lbs"
+    },
+    {
+      "name": "rice",
+      "quantity": "1",
+      "unit": "cup"
+    }
+  ],
+  "cuisine": "Italian",
+  "difficulty": "intermediate",
+  "cookingTime": "medium",
+  "calorieRange": "medium",
+  "dietaryRestrictions": ["gluten-free"],
+  "servings": 4
 }
 ```
 
 **Response:**
 ```json
 {
-  "result": "# 7-Day Tokyo Cultural Experience\n\n## Day 1: Arrival and Asakusa District..."
+  "recipes": [
+    {
+      "id": "recipe_1",
+      "title": "Italian Chicken and Rice",
+      "description": "A delicious Italian-inspired dish...",
+      "ingredients": [...],
+      "instructions": [...],
+      "nutrition": {
+        "calories": 500,
+        "protein": 25.0,
+        "carbs": 45.0,
+        "fat": 20.0,
+        "fiber": 8.0
+      },
+      "cuisine": "Italian",
+      "difficulty": "intermediate",
+      "cookingTime": "30 minutes",
+      "servings": 4,
+      "tips": ["Use fresh ingredients for best results"],
+      "substitutions": {
+        "chicken breast": ["turkey breast", "tofu"]
+      }
+    }
+  ],
+  "agent_type": "Recipe Creator",
+  "route_taken": "ingredient_analysis -> cuisine_research -> nutrition_calculation -> recipe_generation",
+  "result": "Generated recipe content...",
+  "seasoning_suggestions": ["basil", "oregano", "garlic"],
+  "missing_ingredients": ["olive oil", "onion"],
+  "shopping_list": ["olive oil", "onion", "garlic"]
 }
 ```
 
@@ -124,36 +163,89 @@ Health check endpoint.
 
 ### Graph Structure
 ```
-START → [Research, Budget, Local] → Itinerary → END
-       (parallel execution)
+START → Ingredient Analysis → Cuisine Research → Nutrition Calculation → Recipe Generation → END
 ```
 
 ### Key Components
-- `research_node()`: Destination research and weather analysis
-- `budget_node()`: Cost breakdown and money-saving tips  
-- `local_experiences_node()`: Authentic local recommendations
-- `itinerary_node()`: Day-by-day planning with all data
+- `ingredient_analysis_node()`: Analyzes ingredients and suggests recipe possibilities
+- `cuisine_research_node()`: Researches cooking techniques and flavor profiles
+- `nutrition_calculation_node()`: Calculates nutritional information
+- `recipe_generation_node()`: Creates complete recipe with instructions
 
 ### Prompt Templates
 All tools use comprehensive prompt templates with proper variable tracking:
-- `research-v1.0`: Destination analysis
-- `budget-v1.0`: Cost breakdown  
-- `local-v1.0`: Authentic experiences
-- `itinerary-v1.0`: Day-by-day planning
+- `ingredient-analysis-v1.0`: Ingredient analysis and recipe possibilities
+- `cuisine-research-v1.0`: Cuisine-specific cooking techniques
+- `nutrition-calc-v1.0`: Nutritional calculation
+- `recipe-generation-v1.0`: Complete recipe creation
 
-## Troubleshooting
+## Features Overview
 
-### Common Issues
-1. **Slow responses**: Ensure you're using Groq API key, not OpenAI
-2. **Empty results**: Check API key configuration in `.env`
-3. **Graph errors**: Verify all dependencies are installed correctly
+### 🥘 Ingredient-Based Recipe Generation
+- Input available ingredients with quantities
+- AI analyzes ingredient compatibility and cooking methods
+- Offers alternatives for missing ingredients
+- Suggests multiple recipe possibilities
 
-### Performance Monitoring
-View detailed traces and performance metrics in your Arize dashboard to identify bottlenecks and optimize further.
+### 🌶️ Seasoning Profile System
+- Cloud-stored user seasoning preferences
+- Save, edit, and categorize seasoning profiles
+- Auto-integration with new recipes
+- Learning from user's seasoning usage patterns
+
+### 🥗 Calorie-Aware Recipe Options
+- Low (300-500), Medium (500-800), High (800-1200+) calorie ranges
+- Detailed nutritional breakdown per serving
+- Dietary filters: Keto, vegetarian, vegan, gluten-free
+- Adjustable serving sizes with automatic recalculation
+
+### 🌍 Cuisine Navigation & Discovery
+- 20+ global cuisines (Italian, Thai, Mexican, Indian, etc.)
+- Difficulty levels: Beginner, Intermediate, Advanced
+- Cooking time filters: Quick (15-30 min), Medium (30-60 min), Slow (60+ min)
+- Cultural context and cooking techniques for each cuisine
+
+### 📱 Recipe Management & Sharing
+- Save favorite recipes
+- Recipe history tracking
+- Shopping list generation for missing ingredients
+- Social sharing capabilities
 
 ## Tech Stack
 
 - **Frontend**: React, TypeScript, Material-UI, Axios
-- **Backend**: FastAPI, LangGraph, LangChain, Groq, LiteLLM
+- **Backend**: FastAPI, LangGraph, LangChain, OpenAI, LiteLLM
 - **Observability**: Arize, OpenInference, OpenTelemetry
 - **Infrastructure**: Docker, Docker Compose
+
+## Troubleshooting
+
+### Common Issues
+1. **Slow responses**: Check OpenAI API key configuration
+2. **Empty results**: Verify API key configuration in `.env`
+3. **Graph errors**: Ensure all dependencies are installed correctly
+
+### Performance Monitoring
+View detailed traces and performance metrics in your Arize dashboard to identify bottlenecks and optimize further.
+
+## Future Enhancements
+
+### Phase 2: Enhanced Features
+- Advanced AI recipe generation
+- Comprehensive seasoning management
+- Expanded cuisine library (30+ cuisines)
+- Recipe saving and history
+- Voice input capability
+
+### Phase 3: Advanced Features
+- Image recognition for ingredients
+- Social sharing and community features
+- Advanced dietary filters
+- Offline functionality
+- Performance optimization
+
+### Phase 4: Scale & Polish
+- Mobile app development
+- Advanced analytics and personalization
+- Integration with smart kitchen devices
+- Premium features and monetization
