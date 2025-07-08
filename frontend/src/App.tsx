@@ -62,11 +62,14 @@ const theme = createTheme({
   shape: {
     borderRadius: 12,
   },
-  shadows: [
-    'none',
-    '0px 1px 3px rgba(0, 0, 0, 0.12), 0px 1px 2px rgba(0, 0, 0, 0.24)',
-    // ... other shadows
-  ],
+shadows: [
+  'none',
+  '0px 1px 3px rgba(0,0,0,0.12), 0px 1px 2px rgba(0,0,0,0.24)',
+  // …and then 23 more strings, e.g. repeat the same:
+  '0px 1px 3px rgba(0,0,0,0.12), 0px 1px 2px rgba(0,0,0,0.24)',
+  '0px 1px 3px rgba(0,0,0,0.12), 0px 1px 2px rgba(0,0,0,0.24)',
+  // (total array length must be 25)
+],
   components: {
     MuiAppBar: {
       styleOverrides: {
