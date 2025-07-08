@@ -18,6 +18,8 @@ import RecipeForm from './components/RecipeForm';
 import RecipeResults from './components/RecipeResults';
 import { RecipeRequest, RecipeResponse, SeasoningProfile } from './types/recipe';
 
+const API_BASE = process.env.REACT_APP_API_BASE_URL as string;
+
 const theme = createTheme({
   palette: {
     primary: {
@@ -214,7 +216,7 @@ function App() {
     setLoading(true);
     setError(null);
     setRecipeResponse(null);
-
+    
     try {
       const response = await fetch(`${API_BASE}/create-recipe`, {
         method: 'POST',
