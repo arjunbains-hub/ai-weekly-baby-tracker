@@ -1,3 +1,14 @@
+from flask import Flask
+from flask_cors import CORS
+
+app = Flask(__name__)
+# Allow only your frontend domain:
+CORS(app, resources={r"/*": {"origins": "https://ai-recipe-creator-site.onrender.com"}})
+
+@app.route('/create-recipe', methods=['POST'])
+def create_recipe():
+    # …
+
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
