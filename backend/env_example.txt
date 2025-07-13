@@ -1,7 +1,26 @@
+# Weekly Baby Genie Environment Variables
+
+# OpenAI Configuration
 OPENAI_API_KEY=your_openai_api_key_here
-TAVILY_API_KEY=your_tavily_api_key_here
-ARIZE_SPACE_ID=your_arize_space_id_here
-ARIZE_API_KEY=your_arize_api_key_here
+
+# JWT Authentication
+JWT_SECRET_KEY=your_jwt_secret_key_here
+
+# Render Database Configuration (Auto-populated by Render)
+RENDER_DB_HOST=your_render_db_host
+RENDER_DB_NAME=your_render_db_name
+RENDER_DB_USER=your_render_db_user
+RENDER_DB_PASSWORD=your_render_db_password
+RENDER_DB_PORT=5432
+
+# Email Configuration (Optional - for partner sharing)
+RENDER_SMTP_HOST=smtp.gmail.com
+RENDER_SMTP_PORT=587
+RENDER_SMTP_USER=your_email@gmail.com
+RENDER_SMTP_PASSWORD=your_app_password
+
+# Frontend Configuration
+REACT_APP_API_BASE_URL=http://localhost:8000
 
 # LiteLLM Configuration (optional)
 LITELLM_LOG=DEBUG 

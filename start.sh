@@ -1,12 +1,12 @@
 #!/bin/bash
 
-# Recipe Creator Startup Script
+# Weekly Baby Genie Startup Script
 
-echo "🍳 Starting AI Recipe Creator..."
+echo "🍼 Starting Weekly Baby Genie..."
 
 # Check if we're in the right directory
 if [ ! -d "backend" ] || [ ! -d "frontend" ]; then
-    echo "❌ Error: Please run this script from the ai-recipe-creator directory"
+    echo "❌ Error: Please run this script from the project root directory"
     exit 1
 fi
 
@@ -31,7 +31,7 @@ echo ""
 echo "✅ Services started successfully!"
 echo "📡 Backend API: http://localhost:8000"
 echo "🎨 Frontend: http://localhost:3000"
-echo "📊 Arize Tracing: https://app.arize.com/"
+echo "🍼 Weekly Baby Genie is ready to help track your baby's development!"
 echo ""
 echo "Press Ctrl+C to stop all services"
 

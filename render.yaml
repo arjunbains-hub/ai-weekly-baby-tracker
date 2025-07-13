@@ -1,0 +1,58 @@
+databases:
+  - name: weekly-baby-genie-db
+    databaseName: weekly_baby_genie
+    user: weekly_baby_genie_user
+    plan: free
+
+services:
+  - type: web
+    name: weekly-baby-genie-backend
+    env: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.9.16
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: JWT_SECRET_KEY
+        generateValue: true
+      - key: RENDER_DB_HOST
+        fromDatabase:
+          name: weekly-baby-genie-db
+          property: host
+      - key: RENDER_DB_NAME
+        fromDatabase:
+          name: weekly-baby-genie-db
+          property: database
+      - key: RENDER_DB_USER
+        fromDatabase:
+          name: weekly-baby-genie-db
+          property: user
+      - key: RENDER_DB_PASSWORD
+        fromDatabase:
+          name: weekly-baby-genie-db
+          property: password
+      - key: RENDER_DB_PORT
+        fromDatabase:
+          name: weekly-baby-genie-db
+          property: port
+      - key: RENDER_SMTP_HOST
+        value: smtp.gmail.com
+      - key: RENDER_SMTP_PORT
+        value: 587
+      - key: RENDER_SMTP_USER
+        sync: false
+      - key: RENDER_SMTP_PASSWORD
+        sync: false
+
+  - type: web
+    name: weekly-baby-genie-frontend
+    env: static
+    plan: free
+    buildCommand: npm install && npm run build
+    staticPublishPath: ./build
+    envVars:
+      - key: REACT_APP_API_BASE_URL
+        value: https://weekly-baby-genie-backend.onrender.com 

@@ -9,14 +9,11 @@ services:
       - "8000:8000"
     environment:
       - OPENAI_API_KEY=${OPENAI_API_KEY}
-      - SERPER_API_KEY=${SERPER_API_KEY}
-      - ARIZE_SPACE_ID=${ARIZE_SPACE_ID}
-      - ARIZE_API_KEY=${ARIZE_API_KEY}
     volumes:
       - ./backend:/app
     command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
     networks:
-      - recipe-creator
+      - weekly-baby-genie
 
   frontend:
     build:
@@ -31,8 +28,8 @@ services:
     depends_on:
       - backend
     networks:
-      - recipe-creator
+      - weekly-baby-genie
 
 networks:
-  recipe-creator:
+  weekly-baby-genie:
     driver: bridge
